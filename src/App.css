@@ -1,0 +1,494 @@
+/* ========== Layout ========== */
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.mode-tabs {
+  display: inline-flex;
+  gap: 4px;
+  justify-content: center;
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.tab {
+  padding: 8px 24px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.tab:hover { color: var(--text); }
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.app-footer {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* ========== Timer Layout ========== */
+.timer-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 700px) {
+  .timer-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== Buttons ========== */
+.btn {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  transition: all 0.15s;
+}
+.btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn-small { font-size: 0.8rem; padding: 4px 10px; }
+.btn-large { font-size: 1rem; padding: 10px 20px; }
+
+.btn-start { background: #166534; border-color: #22c55e; color: #4ade80; }
+.btn-start:hover:not(:disabled) { background: #15803d; }
+.btn-pause { background: #713f12; border-color: #eab308; color: #facc15; }
+.btn-pause:hover:not(:disabled) { background: #854d0e; }
+.btn-reset { background: var(--bg-card); }
+.btn-save { background: #1e3a5f; border-color: #3b82f6; color: #60a5fa; }
+.btn-save:hover:not(:disabled) { background: #1e40af; }
+.btn-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+.btn-remove:hover:not(:disabled) { color: var(--red); }
+.btn-danger { color: var(--red); }
+.btn-danger:hover:not(:disabled) { border-color: var(--red); }
+
+/* ========== Attendee List ========== */
+.attendee-list {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.attendee-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.attendee-header h3 { font-size: 1rem; color: #fff; }
+
+.attendee-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.attendee-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.attendee-num {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  width: 24px;
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.attendee-row select {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
+.attendee-summary {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.attendee-summary strong { color: var(--green); }
+
+/* ========== Cost Ticker ========== */
+.cost-ticker {
+  text-align: center;
+  padding: 32px 16px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ticker-display {
+  font-family: var(--font-mono);
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -1px;
+  text-shadow: 0 0 40px currentColor;
+}
+
+@media (min-width: 500px) {
+  .ticker-display { font-size: 4.5rem; }
+}
+
+.ticker-dollar {
+  font-size: 0.6em;
+  vertical-align: super;
+  margin-right: 2px;
+  opacity: 0.7;
+}
+
+.ticker-time {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.ticker-warning {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: var(--red);
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: pulse-warning 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.ticker-pulse {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+.ticker-pulse.active {
+  background: var(--green);
+  animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ========== Timer Controls ========== */
+.timer-controls {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meeting-name-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.meeting-name-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.meeting-name-input::placeholder {
+  color: var(--text-muted);
+}
+
+.control-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* ========== Meeting Stats ========== */
+.meeting-stats {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+}
+.meeting-stats h3 { font-size: 1rem; color: #fff; margin-bottom: 12px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 500px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stat-card {
+  background: var(--bg-input);
+  border-radius: 8px;
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.email-threshold { margin-top: 8px; }
+
+.threshold-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.threshold-bar {
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.threshold-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease, background-color 0.5s ease;
+}
+
+/* ========== Quick Calculator ========== */
+.quick-calc {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.quick-calc h3 { font-size: 1.1rem; color: #fff; margin-bottom: 16px; }
+
+.quick-calc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.quick-calc-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.quick-calc-form label span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quick-calc-form input,
+.quick-calc-form select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text);
+  font-size: 1rem;
+}
+.quick-calc-form input:focus,
+.quick-calc-form select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.quick-calc-result {
+  text-align: center;
+  padding: 20px;
+  background: var(--bg-input);
+  border-radius: 12px;
+}
+
+.quick-calc-total {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.quick-calc-total span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.quick-calc-total strong {
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+}
+
+.quick-calc-detail {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ========== Meeting History ========== */
+.meeting-history {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.history-header h3 { font-size: 1rem; color: #fff; }
+
+.history-actions { display: flex; gap: 6px; }
+
+.history-total {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.history-total strong { color: var(--accent); }
+
+.history-empty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 20px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.history-item {
+  padding: 10px 12px;
+  background: var(--bg-input);
+  border-radius: 8px;
+}
+
+.history-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-name {
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 500;
+}
+
+.history-cost {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.history-item-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
