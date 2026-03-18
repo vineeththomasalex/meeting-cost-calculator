@@ -354,70 +354,103 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px;
-  max-width: 480px;
-  margin: 0 auto;
+  max-width: 600px;
+  margin: 0 auto 20px;
 }
-.quick-calc h3 { font-size: 1.1rem; color: #fff; margin-bottom: 16px; }
+.quick-calc h3 { font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
 
-.quick-calc-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-
-.quick-calc-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.quick-calc-form label span {
-  font-size: 0.8rem;
+.quick-calc-subtitle {
+  font-size: 0.85rem;
   color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.quick-calc-table-wrapper {
+  overflow-x: auto;
+}
+
+.quick-calc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.quick-calc-table th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
 }
 
-.quick-calc-form input,
-.quick-calc-form select {
+.quick-calc-table td {
   padding: 10px 12px;
-  border-radius: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.95rem;
+}
+
+.quick-calc-table tr:last-child td {
+  border-bottom: none;
+}
+
+.quick-calc-table .duration-cell {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.quick-calc-table .cost-cell {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--green);
+}
+
+.quick-calc-table .coffee-cell {
+  color: var(--text-muted);
+}
+
+.quick-calc-table .warning-cell {
+  width: 30px;
+}
+
+.quick-calc-table tr.over-threshold .cost-cell {
+  color: var(--red);
+}
+
+.custom-input-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-minutes-input {
+  width: 70px;
+  padding: 5px 8px;
+  border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--bg-input);
   color: var(--text);
-  font-size: 1rem;
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
 }
-.quick-calc-form input:focus,
-.quick-calc-form select:focus {
+
+.custom-minutes-input:focus {
   outline: none;
   border-color: var(--accent);
 }
 
-.quick-calc-result {
-  text-align: center;
-  padding: 20px;
-  background: var(--bg-input);
-  border-radius: 12px;
+.custom-minutes-input::placeholder {
+  color: var(--text-muted);
+  font-family: inherit;
 }
 
-.quick-calc-total {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.quick-calc-total span {
-  font-size: 0.85rem;
+.min-label {
+  font-size: 0.8rem;
   color: var(--text-muted);
-}
-.quick-calc-total strong {
-  font-family: var(--font-mono);
-  font-size: 2.2rem;
 }
 
-.quick-calc-detail {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+.quick-calc-table .dim {
+  color: rgba(255,255,255,0.15);
 }
 
 /* ========== Meeting History ========== */

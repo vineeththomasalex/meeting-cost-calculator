@@ -59,28 +59,27 @@ test('pause timer stops cost from changing', async ({ page }) => {
   expect(costAfterPause).toBe(costLater);
 });
 
-test('switch to quick calc mode', async ({ page }) => {
-  await page.getByRole('button', { name: /Quick Calc/ }).click();
-  await expect(page.getByRole('heading', { name: /Quick Calculator/ })).toBeVisible();
+test('cost projections table shows preset durations', async ({ page }) => {
+  // The projections table should be visible below the timer
+  await expect(page.getByRole('heading', { name: /Cost Projections/ })).toBeVisible();
+
+  // Should show preset duration rows (5, 15, 30, 60 min)
+  const table = page.locator('.quick-calc-table');
+  await expect(table).toBeVisible();
+  const rows = table.locator('tbody tr');
+  const count = await rows.count();
+  // 4 presets + 1 custom input row
+  expect(count).toBeGreaterThanOrEqual(5);
 });
 
-test('quick calc shows estimated cost', async ({ page }) => {
-  await page.getByRole('button', { name: /Quick Calc/ }).click();
+test('cost projections custom minutes input works', async ({ page }) => {
+  const customInput = page.locator('.custom-minutes-input');
+  await customInput.fill('90');
 
-  // The quick calc form has inputs for attendees, role, and duration
-  const attendeesInput = page.locator('.quick-calc-form input[type="number"]').first();
-  const durationInput = page.locator('.quick-calc-form input[type="number"]').last();
-
-  await attendeesInput.fill('10');
-  await durationInput.fill('60');
-
-  // Verify result section shows a cost
-  const totalText = await page.locator('.quick-calc-total strong').textContent();
-  expect(totalText).toMatch(/\$[\d,.]+/);
-
-  // Cost should be > 0
-  const costValue = parseFloat(totalText!.replace(/[$,]/g, ''));
-  expect(costValue).toBeGreaterThan(0);
+  // The custom row should now show a cost value
+  const lastCostCell = page.locator('.quick-calc-table tbody tr:last-child .cost-cell');
+  const text = await lastCostCell.textContent();
+  expect(text).toMatch(/\$[\d,.]+/);
 });
 
 test('meeting stats shows per-minute and coffees', async ({ page }) => {

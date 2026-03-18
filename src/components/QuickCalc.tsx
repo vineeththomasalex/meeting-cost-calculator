@@ -1,70 +1,96 @@
-import { useState } from 'react';
-import { ROLE_BANDS, DEFAULT_ROLE_ID, getRoleBand } from '../utils/salaryData';
+import { useState, useMemo } from 'react';
 import { formatCurrency, perMinuteRate, EMAIL_THRESHOLD, COFFEE_COST } from '../utils/costCalculator';
 
-export default function QuickCalc() {
-  const [count, setCount] = useState(5);
-  const [roleId, setRoleId] = useState(DEFAULT_ROLE_ID);
-  const [minutes, setMinutes] = useState(30);
+interface Props {
+  salaries: number[];
+}
 
-  const band = getRoleBand(roleId);
-  const salaries = Array(count).fill(band.salary);
+const PRESET_MINUTES = [5, 15, 30, 60];
+
+export default function QuickCalc({ salaries }: Props) {
+  const [customMinutes, setCustomMinutes] = useState<number | ''>('');
+
   const perMin = perMinuteRate(salaries);
-  const totalCost = perMin * minutes;
-  const coffees = Math.floor(totalCost / COFFEE_COST);
+
+  const rows = useMemo(() => {
+    const presets = PRESET_MINUTES.map(m => ({
+      minutes: m,
+      cost: perMin * m,
+      coffees: Math.floor((perMin * m) / COFFEE_COST),
+    }));
+    if (customMinutes && customMinutes > 0) {
+      presets.push({
+        minutes: customMinutes,
+        cost: perMin * customMinutes,
+        coffees: Math.floor((perMin * customMinutes) / COFFEE_COST),
+      });
+    }
+    return presets;
+  }, [perMin, customMinutes]);
+
+  if (salaries.length === 0) return null;
 
   return (
     <div className="quick-calc">
-      <h3>⚡ Quick Calculator</h3>
-
-      <div className="quick-calc-form">
-        <label>
-          <span>Attendees</span>
-          <input
-            type="number"
-            min={1}
-            max={100}
-            value={count}
-            onChange={e => setCount(Math.max(1, parseInt(e.target.value) || 1))}
-          />
-        </label>
-
-        <label>
-          <span>Avg. Role</span>
-          <select value={roleId} onChange={e => setRoleId(e.target.value)}>
-            {ROLE_BANDS.map(b => (
-              <option key={b.id} value={b.id}>
-                {b.label} (~${(b.salary / 1000).toFixed(0)}k)
-              </option>
+      <h3>📊 Cost Projections</h3>
+      <p className="quick-calc-subtitle">
+        Estimated cost for {salaries.length} attendee{salaries.length !== 1 ? 's' : ''} at {formatCurrency(perMin)}/min
+      </p>
+      <div className="quick-calc-table-wrapper">
+        <table className="quick-calc-table">
+          <thead>
+            <tr>
+              <th>Duration</th>
+              <th>Cost</th>
+              <th>☕</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.minutes} className={row.cost >= EMAIL_THRESHOLD ? 'over-threshold' : ''}>
+                <td className="duration-cell">{row.minutes} min</td>
+                <td className="cost-cell">{formatCurrency(row.cost)}</td>
+                <td className="coffee-cell">{row.coffees}</td>
+                <td className="warning-cell">
+                  {row.cost >= EMAIL_THRESHOLD ? '📧' : ''}
+                </td>
+              </tr>
             ))}
-          </select>
-        </label>
-
-        <label>
-          <span>Duration (min)</span>
-          <input
-            type="number"
-            min={1}
-            max={480}
-            value={minutes}
-            onChange={e => setMinutes(Math.max(1, parseInt(e.target.value) || 1))}
-          />
-        </label>
-      </div>
-
-      <div className="quick-calc-result">
-        <div className="quick-calc-total">
-          <span>Estimated Cost</span>
-          <strong style={{ color: totalCost >= EMAIL_THRESHOLD ? '#ef4444' : '#4ade80' }}>
-            {formatCurrency(totalCost)}
-          </strong>
-        </div>
-        <div className="quick-calc-detail">
-          {formatCurrency(perMin)}/min • ☕ {coffees} cups of coffee
-        </div>
-        {totalCost >= EMAIL_THRESHOLD && (
-          <div className="ticker-warning">📧 This could have been an email!</div>
-        )}
+            <tr className={customMinutes && customMinutes > 0 ? '' : 'custom-row-empty'}>
+              <td className="duration-cell custom-input-cell">
+                <input
+                  type="number"
+                  min={1}
+                  max={480}
+                  placeholder="Custom"
+                  value={customMinutes}
+                  onChange={e => {
+                    const v = e.target.value;
+                    setCustomMinutes(v === '' ? '' : Math.max(1, parseInt(v) || 1));
+                  }}
+                  className="custom-minutes-input"
+                />
+                <span className="min-label">min</span>
+              </td>
+              {customMinutes && customMinutes > 0 ? (
+                <>
+                  <td className="cost-cell">{formatCurrency(perMin * customMinutes)}</td>
+                  <td className="coffee-cell">{Math.floor((perMin * customMinutes) / COFFEE_COST)}</td>
+                  <td className="warning-cell">
+                    {perMin * customMinutes >= EMAIL_THRESHOLD ? '📧' : ''}
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td className="cost-cell dim">—</td>
+                  <td className="coffee-cell dim">—</td>
+                  <td className="warning-cell"></td>
+                </>
+              )}
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

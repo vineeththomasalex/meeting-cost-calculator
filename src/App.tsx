@@ -8,10 +8,7 @@ import { getRoleBand } from './utils/salaryData';
 import { combinedPerSecondRate, perMinuteRate, saveToHistory } from './utils/costCalculator';
 import './App.css';
 
-type Mode = 'timer' | 'quick';
-
 function App() {
-  const [mode, setMode] = useState<Mode>('timer');
   const [attendees, setAttendees] = useState<Attendee[]>([createAttendee(), createAttendee('senior')]);
   const [isRunning, setIsRunning] = useState(false);
   const [cost, setCost] = useState(0);
@@ -82,80 +79,63 @@ function App() {
       <header className="app-header">
         <h1>Meeting Cost Calculator 💰</h1>
         <p className="subtitle">See what meetings really cost your organization</p>
-        <div className="mode-tabs">
-          <button
-            className={`tab ${mode === 'timer' ? 'active' : ''}`}
-            onClick={() => setMode('timer')}
-          >
-            ⏱ Live Timer
-          </button>
-          <button
-            className={`tab ${mode === 'quick' ? 'active' : ''}`}
-            onClick={() => setMode('quick')}
-          >
-            ⚡ Quick Calc
-          </button>
-        </div>
       </header>
 
       <main className="app-main">
-        {mode === 'timer' ? (
-          <div className="timer-layout">
-            <div className="timer-left">
-              <AttendeeList
-                attendees={attendees}
-                onChange={setAttendees}
+        <div className="timer-layout">
+          <div className="timer-left">
+            <AttendeeList
+              attendees={attendees}
+              onChange={setAttendees}
+              disabled={isRunning}
+            />
+          </div>
+
+          <div className="timer-center">
+            <CostTicker cost={cost} elapsedSeconds={elapsed} isRunning={isRunning} />
+
+            <div className="timer-controls">
+              <input
+                type="text"
+                className="meeting-name-input"
+                placeholder="Meeting name (optional)"
+                value={meetingName}
+                onChange={e => setMeetingName(e.target.value)}
                 disabled={isRunning}
               />
-            </div>
-
-            <div className="timer-center">
-              <CostTicker cost={cost} elapsedSeconds={elapsed} isRunning={isRunning} />
-
-              <div className="timer-controls">
-                <input
-                  type="text"
-                  className="meeting-name-input"
-                  placeholder="Meeting name (optional)"
-                  value={meetingName}
-                  onChange={e => setMeetingName(e.target.value)}
-                  disabled={isRunning}
-                />
-                <div className="control-buttons">
-                  <button
-                    className={`btn btn-large ${isRunning ? 'btn-pause' : 'btn-start'}`}
-                    onClick={handleStart}
-                  >
-                    {isRunning ? '⏸ Pause' : elapsed > 0 ? '▶ Resume' : '▶ Start'}
-                  </button>
-                  <button
-                    className="btn btn-large btn-reset"
-                    onClick={handleReset}
-                    disabled={elapsed === 0}
-                  >
-                    ↺ Reset
-                  </button>
-                  <button
-                    className="btn btn-large btn-save"
-                    onClick={handleSave}
-                    disabled={elapsed < 1 || isRunning}
-                  >
-                    💾 Save
-                  </button>
-                </div>
+              <div className="control-buttons">
+                <button
+                  className={`btn btn-large ${isRunning ? 'btn-pause' : 'btn-start'}`}
+                  onClick={handleStart}
+                >
+                  {isRunning ? '⏸ Pause' : elapsed > 0 ? '▶ Resume' : '▶ Start'}
+                </button>
+                <button
+                  className="btn btn-large btn-reset"
+                  onClick={handleReset}
+                  disabled={elapsed === 0}
+                >
+                  ↺ Reset
+                </button>
+                <button
+                  className="btn btn-large btn-save"
+                  onClick={handleSave}
+                  disabled={elapsed < 1 || isRunning}
+                >
+                  💾 Save
+                </button>
               </div>
-
-              <MeetingStats
-                cost={cost}
-                perMinute={ratePerMinute}
-                attendeeCount={attendees.length}
-              />
             </div>
-          </div>
-        ) : (
-          <QuickCalc />
-        )}
 
+            <MeetingStats
+              cost={cost}
+              perMinute={ratePerMinute}
+              attendeeCount={attendees.length}
+            />
+          </div>
+        </div>
+
+        <QuickCalc salaries={salaries} />
         <MeetingHistory />
       </main>
 
